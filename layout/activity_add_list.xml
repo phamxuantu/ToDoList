@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.toanutc.todolist.AddListActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarAdd"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorToolbar"
+        android:theme="@style/CustomTheme">
+
+        <LinearLayout
+            android:id="@+id/linearToolbarAdd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="10"
+                android:src="@drawable/logo"/>
+
+
+            <TextView
+                android:id="@+id/lblToolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="90"
+                android:text="AddListActivity"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Công việc"
+                android:textColor="#4985c5"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/edtNameTodo"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:hint="Công việc của bạn"
+                android:inputType="text"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Báo thức"
+                android:textColor="#4985c5"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btnSelectDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Tắt"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Danh mục"
+                android:textColor="#4985c5"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <Spinner
+                android:id="@+id/spinnerCategoryAdd"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Chi tiết"
+                android:textColor="#4985c5"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/edtDescription"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:hint="Nội dung"
+                android:maxLines="5"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lưu" />
+
+                <Button
+                    android:id="@+id/btncancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Hủy bỏ" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/todoList">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:theme="@style/CustomTheme"
+        android:background="@color/colorToolbar"
+        android:id="@+id/toolbar"
+        >
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/linearToolbar"
+            android:weightSum="100">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/logo"
+                android:layout_weight="10"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/search"
+                android:layout_weight="10"
+                android:layout_gravity="center"
+                android:id="@+id/imgsearch"
+                android:visibility="gone"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ToDoList"
+                android:id="@+id/lblToolbar"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:layout_weight="60"
+                android:layout_gravity="center"
+                />
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:layout_gravity="center"
+                android:textColor="#fff"
+                android:maxLines="1"
+                android:inputType="text"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:hint="Search"
+                android:visibility="gone"/>
+
+            <Button
+                android:layout_width="22dp"
+                android:layout_height="35dp"
+                android:id="@+id/search"
+                android:background="@drawable/search"
+                android:layout_weight="10"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:layout_width="18dp"
+                android:layout_height="30dp"
+                android:id="@+id/close"
+                android:background="@drawable/close"
+                android:layout_weight="10"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <Button
+                android:layout_width="16dp"
+                android:layout_height="35dp"
+                android:id="@+id/add"
+                android:background="@drawable/add"
+                android:layout_weight="10"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+    
+
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/tabs"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabSelectedTextColor="#fff"
+        android:background="#000"
+        app:tabTextColor="#fff"
+        app:tabBackground="@drawable/tab_color_selector"
+        app:tabIndicatorHeight="0dp"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/viewpager"
+        />
+
+
+</LinearLayout>
