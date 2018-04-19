@@ -1,11 +1,11 @@
 package com.toanutc.todolist;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,22 +18,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by sev_user on 10-Apr-18.
- */
-
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
-    ArrayList<ToDo> toDos;
+    private ArrayList<ToDo> toDos;
     Context context;
-    int layout;
+    private int layout;
     SQLiteHelper db;
 
-    public ToDoAdapter(ArrayList<ToDo> toDos, Context context, int layout, SQLiteHelper db) {
+    ToDoAdapter(ArrayList<ToDo> toDos, Context context, int layout, SQLiteHelper db) {
         this.toDos = toDos;
         this.context = context;
         this.layout = layout;
@@ -47,8 +42,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         return new ViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         if (MainActivity.TAB_POSITION == 1 || MainActivity.TAB_POSITION == 2) {
             holder.checkBox.setVisibility(View.INVISIBLE);
@@ -66,18 +62,17 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         );
         holder.imageView.setImageResource(toDos.get(position).getImageAlert());
 
+        if (toDos.get(position).getCheck()) {
+            holder.checkBox.setEnabled(false);
+        }
+
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!holder.checkBox.isChecked()) {
-                    holder.txtvName.setPaintFlags(holder.txtvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    db.updateTodo(new ToDo(toDos.get(position).getId(), false, toDos.get(position).getName(), toDos.get(position).getTime(), toDos.get(position).getCategories(), toDos.get(position).getDescription(), toDos.get(position).getImageAlert()));
-
-                } else {
-                    holder.txtvName.setPaintFlags(holder.txtvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    Util.stopJob(toDos.get(position).getId());
-                    db.updateTodo(new ToDo(toDos.get(position).getId(), true, toDos.get(position).getName(), toDos.get(position).getTime(), toDos.get(position).getCategories(), toDos.get(position).getDescription(), toDos.get(position).getImageAlert()));
-                }
+                holder.txtvName.setPaintFlags(holder.txtvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                Util.stopJob(toDos.get(position).getId(), context);
+                db.updateTodo(new ToDo(toDos.get(position).getId(), true, toDos.get(position).getName(), toDos.get(position).getTime(), toDos.get(position).getCategories(), toDos.get(position).getDescription(), toDos.get(position).getImageAlert()));
+                holder.checkBox.setEnabled(false);
             }
         });
 
@@ -92,13 +87,10 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
                 final ToDo toDo = db.getToDo(toDos.get(position).getId());
 
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                View itemView = inflater.inflate(R.layout.layout_dialog, null);
+                @SuppressLint("InflateParams") View itemView = inflater.inflate(R.layout.layout_dialog, null);
 
-                final EditText txtName = (EditText) itemView.findViewById(R.id.txtNameToDo);
+                final EditText txtName = itemView.findViewById(R.id.txtNameToDo);
                 txtName.setText(toDo.getName());
-
-//                final TextView txtCategory = (TextView) itemView.findViewById(R.id.txtCategoryToDo);
-//                txtCategory.setText(toDos.get(position).getCategories());
 
                 for (int i = 0; i < MainActivity.arrCategory.length; i++) {
                     if (toDo.getCategories().equals(MainActivity.arrCategory[i])) {
@@ -107,8 +99,8 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
                     }
                 }
 
-                Spinner spinner = (Spinner) itemView.findViewById(R.id.spinnerCategory);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.context, android.R.layout.simple_spinner_item, MainActivity.arrCategory);
+                Spinner spinner = itemView.findViewById(R.id.spinnerCategory);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.context, android.R.layout.simple_spinner_item, MainActivity.arrCategory);
                 adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
                 spinner.setAdapter(adapter);
                 spinner.setSelection(selectedSpinner[0]);
@@ -120,14 +112,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-//                        txtCategory.setText("");
                     }
                 });
 
-                final EditText txtDesciption = (EditText) itemView.findViewById(R.id.txtDescriptionToDo);
+                final EditText txtDesciption = itemView.findViewById(R.id.txtDescriptionToDo);
                 txtDesciption.setText(toDo.getDescription());
 
-                final TextView txtStatus = (TextView) itemView.findViewById(R.id.txtStatusToDo);
+                final TextView txtStatus = itemView.findViewById(R.id.txtStatusToDo);
                 txtStatus.setText(toDo.getCheck() ? "Đã xong" : "Chưa xong");
 
                 builder.setView(itemView).setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -197,22 +188,20 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         return toDos.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         CheckBox checkBox;
         TextView txtvName, txtvDetail;
         ImageView imageView;
         LinearLayout linearLayoutItem;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkTodo);
-            txtvName = (TextView) itemView.findViewById(R.id.txtName);
-            txtvDetail = (TextView) itemView.findViewById(R.id.txtDetail);
-            imageView = (ImageView) itemView.findViewById(R.id.imgAlarm);
-            linearLayoutItem = (LinearLayout) itemView.findViewById(R.id.ll_item);
-
-
+            checkBox = itemView.findViewById(R.id.checkTodo);
+            txtvName = itemView.findViewById(R.id.txtName);
+            txtvDetail = itemView.findViewById(R.id.txtDetail);
+            imageView = itemView.findViewById(R.id.imgAlarm);
+            linearLayoutItem = itemView.findViewById(R.id.ll_item);
         }
 
     }

@@ -5,26 +5,54 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.view.WindowManager;
 
 public class DialogActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        PowerManager pm = (PowerManager)this.getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isScreenOn();
+//        Log.e("screen on", ""+isScreenOn);
+        if(isScreenOn==false)
+        {
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"MyLock");
+            wl.acquire(10000);
+            PowerManager.WakeLock wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MyCpuLock");
+
+            wl_cpu.acquire(10000);
+
+            wl.release();
+            wl_cpu.release();
+        }
+
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.screenBrightness = 1;
+        params.flags = WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON;
+        getWindow().setAttributes(params);
+
+        final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.ringtone);
+        mediaPlayer.start();
+        mediaPlayer.setLooping(true);
+
         Intent intent = getIntent();
         final ToDo toDo = MyService.db.getToDo(intent.getExtras().getInt("idToDo"));
         Intent intentNot = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intentNot,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentNot, 0);
         Notification.Builder notBuilder = new Notification.Builder(this).setContentTitle(toDo.getName())
                 .setContentText(toDo.getDescription())
                 .setSmallIcon(R.drawable.logo)
                 .setAutoCancel(true).setContentIntent(pendingIntent);
-        NotificationManager notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0,notBuilder.build());
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(intent.getExtras().getInt("idToDo"), notBuilder.build());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(toDo.getName());
@@ -45,6 +73,7 @@ public class DialogActivity extends Activity {
                         tabNotDone.updateList();
                     }
                 }
+                mediaPlayer.release();
                 finish();
                 dialog.dismiss();
             }

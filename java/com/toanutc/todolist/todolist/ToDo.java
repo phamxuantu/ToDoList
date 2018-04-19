@@ -1,9 +1,5 @@
 package com.toanutc.todolist;
 
-/**
- * Created by sev_user on 09-Apr-18.
- */
-
 public class ToDo {
 
     private int id;
@@ -14,10 +10,10 @@ public class ToDo {
     private String description;
     private int imageAlert;
 
-    public ToDo() {
+    ToDo() {
     }
 
-    public ToDo(int id, Boolean check, String name, String time, String categories, String description, int imageAlert) {
+    ToDo(int id, Boolean check, String name, String time, String categories, String description, int imageAlert) {
         this.id = id;
         this.check = check;
         this.name = name;
@@ -35,11 +31,11 @@ public class ToDo {
         this.id = id;
     }
 
-    public Boolean getCheck() {
+    Boolean getCheck() {
         return check;
     }
 
-    public void setCheck(Boolean check) {
+    void setCheck(Boolean check) {
         this.check = check;
     }
 
@@ -59,27 +55,27 @@ public class ToDo {
         this.time = time;
     }
 
-    public String getCategories() {
+    String getCategories() {
         return categories;
     }
 
-    public void setCategories(String categories) {
+    void setCategories(String categories) {
         this.categories = categories;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
-    public int getImageAlert() {
+    int getImageAlert() {
         return imageAlert;
     }
 
-    public void setImageAlert(int imageAlert) {
+    void setImageAlert(int imageAlert) {
         this.imageAlert = imageAlert;
     }
 }

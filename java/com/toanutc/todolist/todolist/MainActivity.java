@@ -1,45 +1,32 @@
 package com.toanutc.todolist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
     public static int TAB_POSITION = 0;
+    @SuppressLint("StaticFieldLeak")
     public static Context context;
     public static String arrCategory[] = {"Bạn bè", "Gia đình", "Công việc", "Học tập", "Khác"};
-    public static SQLiteHelper db;
     static boolean active = false;
 
 
     TabLayout tabLayout;
     ViewPager viewPager;
-    int selectedTab = 0;
 
     @Override
     protected void onStart() {
@@ -60,17 +47,15 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
 
-        db = new SQLiteHelper(this, 1);
+        tabLayout = findViewById(R.id.tabs);
+        viewPager = findViewById(R.id.viewpager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-
-        final Button btnSearch = (Button) findViewById(R.id.search);
-        final Button btnClose = (Button) findViewById(R.id.close);
-        final ImageView imgSearch = (ImageView) findViewById(R.id.imgsearch);
-        final TextView lblToolbar = (TextView) findViewById(R.id.lblToolbar);
-        final EditText edtSearch = (EditText) findViewById(R.id.edtSearch);
-        Button btnAdd = (Button) findViewById(R.id.add);
+        final Button btnSearch = findViewById(R.id.search);
+        final Button btnClose = findViewById(R.id.close);
+        final ImageView imgSearch = findViewById(R.id.imgsearch);
+        final TextView lblToolbar = findViewById(R.id.lblToolbar);
+        final EditText edtSearch = findViewById(R.id.edtSearch);
+        Button btnAdd = findViewById(R.id.add);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 imgSearch.setVisibility(View.GONE);
                 edtSearch.setVisibility(View.GONE);
                 btnClose.setVisibility(View.GONE);
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
-                if (selectedTab == 0) {
+                if (TAB_POSITION == 0) {
                     TabAll tabAll = new TabAll();
                     tabAll.updateList();
-                } else if (selectedTab == 1) {
+                } else if (TAB_POSITION == 1) {
                     TabDone tabDone = new TabDone();
                     tabDone.updateList();
                 } else {
@@ -124,12 +109,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(selectedTab == 0)
-                {
+                if (TAB_POSITION == 0) {
                     TabAll tabAll = new TabAll();
                     tabAll.searchAll(s);
-                } else if (selectedTab == 1)
-                {
+                } else if (TAB_POSITION == 1) {
                     TabDone tabDone = new TabDone();
                     tabDone.searchDone(s);
                 } else {
@@ -151,14 +134,13 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                selectedTab = tab.getPosition();
                 TAB_POSITION = tab.getPosition();
 //                Log.e("test tab", String.valueOf(position));
 
-                if (selectedTab == 0) {
+                if (TAB_POSITION == 0) {
                     TabAll tabAll = new TabAll();
                     tabAll.updateList();
-                } else if (selectedTab == 1) {
+                } else if (TAB_POSITION == 1) {
                     TabDone tabDone = new TabDone();
                     tabDone.updateList();
                 } else {

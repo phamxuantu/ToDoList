@@ -1,11 +1,11 @@
 package com.toanutc.todolist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sev_user on 09-Apr-18.
- */
-
 public class TabNotDone extends Fragment {
 
     static SQLiteHelper db;
+    @SuppressLint("StaticFieldLeak")
     static ToDoAdapter adapter;
+    @SuppressLint("StaticFieldLeak")
     static RecyclerView recyclerView;
     static ArrayList<ToDo> arrayList;
     static LinearLayoutManager layoutManager;
@@ -32,14 +30,14 @@ public class TabNotDone extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_tab_notdone, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.activity_tab_notdone, null);
         db = new SQLiteHelper(MainActivity.context, 1);
         initView(view);
         return view;
     }
 
     public void initView(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.listNotDone);
+        recyclerView = view.findViewById(R.id.listNotDone);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(MainActivity.context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -48,8 +46,6 @@ public class TabNotDone extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         arrayList = new ArrayList<>();
-
-        db.createDefaultTodoIfNeed();
 
         List<ToDo> list = db.getToDosNotDone();
         arrayList.addAll(list);
@@ -62,11 +58,9 @@ public class TabNotDone extends Fragment {
         String query = s.toString().toLowerCase().trim();
         ArrayList<ToDo> filterList = new ArrayList<>();
 
-        for (int i = 0; i < arrayList.size(); i++)
-        {
+        for (int i = 0; i < arrayList.size(); i++) {
             String text = arrayList.get(i).getName().toLowerCase();
-            if (text.contains(query))
-            {
+            if (text.contains(query)) {
                 filterList.add(arrayList.get(i));
             }
         }
@@ -77,7 +71,7 @@ public class TabNotDone extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public void updateList(){
+    public void updateList() {
 
         arrayList = new ArrayList<>();
         List<ToDo> list = db.getToDosNotDone();
